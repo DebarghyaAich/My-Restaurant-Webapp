@@ -4,12 +4,14 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd Backend && node server.js",
-    "dev:client": "cd Frontend && npx vite",
-    "build": "cd Frontend && npx vite build",
-    "start": "cd Backend && node server.js",
-    "install:all": "cd Backend && npm install && cd ../Frontend && npm install",
-    "lint": "cd Frontend && npx eslint ."
+    "dev:server": "npm --prefix Backend run start",
+    "dev:client": "npm --prefix Frontend run dev",
+    "build": "npm --prefix Frontend install && npm --prefix Frontend run build && npm --prefix Backend install",
+    "build:frontend": "npm --prefix Frontend install && npm --prefix Frontend run build",
+    "build:backend": "npm --prefix Backend run build",
+    "start": "npm --prefix Backend run start",
+    "install:all": "npm --prefix Backend install && npm --prefix Frontend install",
+    "lint": "npm --prefix Frontend run lint"
   },
   "dependencies": {
     "concurrently": "^10.0.5"
