@@ -24,11 +24,24 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
-    if (!name || !email || !password || !confirmPassword) {
-      return res.status(400).json({ success: false, message: 'All fields are required.' });
+    if (!name || !name.trim()) {
+      return res.status(400).json({ success: false, message: 'Please enter your full name.' });
     }
 
-    if (password !== confirmPassword) {
+    if (!email || !email.trim()) {
+      return res.status(400).json({ success: false, message: 'Please enter an email address.' });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    }
+
+    if (!password) {
+      return res.status(400).json({ success: false, message: 'Please enter a password.' });
+    }
+
+    if (confirmPassword !== undefined && confirmPassword !== null && password !== confirmPassword) {
       return res.status(400).json({ success: false, message: 'Passwords do not match.' });
     }
 
@@ -36,15 +49,16 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long.' });
     }
 
-    const existing = await UserModel.findOne({ email });
+    const normalizedEmail = email.toLowerCase().trim();
+    const existing = await UserModel.findOne({ email: normalizedEmail });
     if (existing) {
-      return res.status(400).json({ success: false, message: 'An account with this email already exists.' });
+      return res.status(400).json({ success: false, message: 'An account with this email already exists. Please log in.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await UserModel.create({
       name: name.trim(),
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
       password: hashedPassword,
       role: 'User' // Every newly registered account is assigned 'User'
     });
@@ -64,7 +78,7 @@ router.post('/register', async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    return res.status(500).json({ success: false, message: 'Server error during registration.' });
+    return res.status(500).json({ success: false, message: error.message || 'Server error during registration.' });
   }
 });
 
@@ -77,7 +91,8 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide both email and password.' });
     }
 
-    const user = await UserModel.findOne({ email });
+    const normalizedEmail = (email || '').toLowerCase().trim();
+    const user = await UserModel.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
@@ -102,7 +117,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    return res.status(500).json({ success: false, message: 'Server error during login.' });
+    return res.status(500).json({ success: false, message: error.message || 'Server error during login.' });
   }
 });
 
