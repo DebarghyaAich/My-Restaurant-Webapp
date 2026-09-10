@@ -1,0 +1,17 @@
+{
+  "name": "dabba-restaurant",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd Backend && node server.js",
+    "dev:client": "cd Frontend && npx vite",
+    "build": "cd Frontend && npx vite build",
+    "start": "cd Backend && node server.js",
+    "install:all": "cd Backend && npm install && cd ../Frontend && npm install",
+    "lint": "cd Frontend && npx eslint ."
+  },
+  "dependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
