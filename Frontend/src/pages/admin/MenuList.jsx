@@ -76,71 +76,68 @@ const MenuList = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto">
       
-      {/* Top Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
-          <span className="text-xs font-black uppercase tracking-widest text-rose-400">
-            Culinary Catalog & Inventory
-          </span>
-          <h1 className="text-3xl font-black text-white tracking-tight mt-1">
-            Menu Item Management
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            Menu Items
           </h1>
-          <p className="text-xs text-purple-200/70">
-            Add, update, or remove dishes and configure live kitchen availability
+          <p className="text-xs text-slate-500 font-medium mt-0.5">
+            Manage your dishes, pricing, categories, and real-time inventory
           </p>
         </div>
 
         <Link
           to="/admin/menu/new"
-          className="px-5 py-3 bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 hover:from-rose-500 hover:via-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2 self-start sm:self-auto border border-rose-400/20"
+          className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg shadow-xs transition-colors flex items-center gap-1.5 self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          Add New Menu Item
+          Add Menu Item
         </Link>
       </div>
 
       {message && (
-        <div className="p-4 bg-emerald-950/70 border border-emerald-800/80 text-emerald-300 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-lg shadow-emerald-950/40">
-          <CheckCircle2 className="w-4 h-4" />
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium rounded-xl flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           {message}
         </div>
       )}
 
       {error && (
-        <div className="p-4 bg-rose-950/70 border border-rose-800/80 text-rose-300 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-lg shadow-rose-950/40">
-          <AlertCircle className="w-4 h-4" />
+        <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium rounded-xl flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
           {error}
         </div>
       )}
 
       {/* Filter and Search Bar */}
-      <div className="admin-glass-card p-6 rounded-3xl flex flex-col sm:flex-row gap-4 items-center justify-between shadow-xl">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">
         
         {/* Search */}
-        <div className="relative w-full sm:w-96">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-rose-400/60" />
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search menu item by name..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white placeholder-purple-400/40 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
+            placeholder="Search dishes..."
+            className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-slate-900 transition-colors"
           />
         </div>
 
         {/* Category Pill filter */}
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto scrollbar-none">
           {['All', 'Starter', 'Main Course', 'Dessert', 'Beverage'].map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                 category === cat
-                  ? 'bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 text-white shadow-md shadow-rose-600/30 border border-rose-400/30'
-                  : 'bg-[#140826] text-purple-300/70 hover:text-white hover:bg-rose-950/40 border border-purple-900/40'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
               }`}
             >
               {cat}
@@ -151,16 +148,17 @@ const MenuList = () => {
       </div>
 
       {/* Menu Table */}
-      <div className="admin-glass-card rounded-3xl overflow-hidden shadow-2xl">
+      <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
         {loading ? (
-          <div className="p-12 text-center text-purple-300/50 text-xs">
+          <div className="p-12 text-center text-slate-400 text-xs font-medium">
             Loading menu records...
           </div>
         ) : items.length === 0 ? (
-          <div className="p-12 text-center text-purple-300/60 space-y-3">
-            <Utensils className="w-8 h-8 text-rose-400/50 mx-auto" />
-            <p className="text-sm font-bold text-white">No dishes match your search criteria</p>
-            <Link to="/admin/menu/new" className="text-xs text-rose-400 font-bold hover:underline inline-block">
+          <div className="p-12 text-center space-y-2">
+            <Utensils className="w-8 h-8 text-slate-300 mx-auto" />
+            <p className="text-sm font-semibold text-slate-900">No dishes match your search</p>
+            <p className="text-xs text-slate-500">Try changing your filters or add a new menu item.</p>
+            <Link to="/admin/menu/new" className="text-xs text-slate-900 font-semibold hover:underline inline-block pt-1">
               Add your first dish
             </Link>
           </div>
@@ -168,77 +166,77 @@ const MenuList = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-purple-900/40 text-purple-200/60 font-bold uppercase tracking-wider text-[10px] bg-purple-950/40">
-                  <th className="py-4 px-6">Dish Preview</th>
-                  <th className="py-4 px-4">Category</th>
-                  <th className="py-4 px-4">Price</th>
-                  <th className="py-4 px-4">Availability</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
+                <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="py-3 px-5 font-medium">Dish</th>
+                  <th className="py-3 px-4 font-medium">Category</th>
+                  <th className="py-3 px-4 font-medium">Price</th>
+                  <th className="py-3 px-4 font-medium">Availability</th>
+                  <th className="py-3 px-5 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-purple-900/30">
+              <tbody className="divide-y divide-slate-100">
                 {items.map((item) => {
                   const itemId = item._id || item.id;
                   return (
-                    <tr key={itemId} className="hover:bg-rose-950/20 transition-colors">
+                    <tr key={itemId} className="hover:bg-slate-50/70 transition-colors">
                       
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-5">
                         <div className="flex items-center gap-3">
                           <img
                             src={item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80'}
                             alt={item.name}
-                            className="w-14 h-14 rounded-2xl object-cover bg-[#120622] shrink-0 border border-purple-900/50"
+                            className="w-11 h-11 rounded-lg object-cover bg-slate-100 shrink-0 border border-slate-200"
                           />
                           <div>
-                            <p className="font-bold text-sm text-white">{item.name}</p>
-                            <p className="text-[11px] text-purple-300/60 line-clamp-1 max-w-sm mt-0.5">
+                            <p className="font-semibold text-slate-900 text-xs">{item.name}</p>
+                            <p className="text-[11px] text-slate-500 line-clamp-1 max-w-xs sm:max-w-sm mt-0.5">
                               {item.description}
                             </p>
                           </div>
                         </div>
                       </td>
 
-                      <td className="py-4 px-4">
-                        <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-purple-950/60 text-purple-300 border border-purple-800/60">
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
                           {item.category}
                         </span>
                       </td>
 
-                      <td className="py-4 px-4">
-                        <span className="font-extrabold text-sm text-rose-400">
+                      <td className="py-3 px-4">
+                        <span className="font-semibold text-xs text-slate-900">
                           ₹{Number(item.price)}
                         </span>
                       </td>
 
-                      <td className="py-4 px-4">
+                      <td className="py-3 px-4">
                         <button
                           type="button"
                           onClick={() => handleToggleStock(item)}
-                          className={`px-3 py-1 rounded-full text-[11px] font-bold inline-flex items-center gap-1.5 transition-all ${
+                          className={`px-2.5 py-1 rounded-md text-[11px] font-medium inline-flex items-center gap-1.5 border transition-colors ${
                             item.availability !== false
-                              ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/60'
-                              : 'bg-rose-950/80 text-rose-300 border border-rose-800/60'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                              : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
                           }`}
                           title="Click to toggle availability"
                         >
                           {item.availability !== false ? (
                             <>
-                              <CheckCircle2 className="w-3 h-3" /> In Stock
+                              <CheckCircle2 className="w-3 h-3 text-emerald-600" /> In Stock
                             </>
                           ) : (
                             <>
-                              <XCircle className="w-3 h-3" /> Out of Stock
+                              <XCircle className="w-3 h-3 text-rose-600" /> Out of Stock
                             </>
                           )}
                         </button>
                       </td>
 
-                      <td className="py-4 px-6 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="py-3 px-5 text-right">
+                        <div className="flex items-center justify-end gap-1">
                           <Link
                             to={`/menu/${itemId}`}
                             target="_blank"
-                            className="p-2 text-purple-300/70 hover:text-white hover:bg-purple-950/60 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"
                             title="View on storefront"
                           >
                             <Eye className="w-4 h-4" />
@@ -246,7 +244,7 @@ const MenuList = () => {
 
                           <Link
                             to={`/admin/menu/edit/${itemId}`}
-                            className="p-2 text-rose-400 hover:text-rose-300 hover:bg-rose-950/60 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-md transition-colors"
                             title="Edit menu item"
                           >
                             <Edit className="w-4 h-4" />
@@ -255,7 +253,7 @@ const MenuList = () => {
                           <button
                             type="button"
                             onClick={() => handleDelete(itemId, item.name)}
-                            className="p-2 text-rose-400 hover:text-rose-300 hover:bg-rose-950/60 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                             title="Delete menu item"
                           >
                             <Trash2 className="w-4 h-4" />

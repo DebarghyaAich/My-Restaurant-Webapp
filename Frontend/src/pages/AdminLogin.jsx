@@ -52,44 +52,37 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 admin-theme-root relative overflow-hidden">
+    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-slate-50 relative">
       
-      {/* Floating Ambient Glow */}
-      <AdminFloatingBackground />
-
-      <div className="max-w-md w-full space-y-8 admin-glass-card text-white p-8 sm:p-10 rounded-3xl border border-purple-900/40 shadow-2xl relative z-10">
+      <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-2xl border border-slate-200/80 shadow-xs relative z-10">
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-rose-600/20 border border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto shadow-lg shadow-rose-600/20">
-            <ShieldCheck className="w-8 h-8" />
+          <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center mx-auto shadow-xs">
+            <ShieldCheck className="w-5 h-5" />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-rose-300 bg-rose-950/80 border border-rose-800/80 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-rose-400" />
-            Authorized Personnel Only
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            Dabba Admin Portal
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+            Admin Portal
           </h2>
-          <p className="text-xs text-purple-300/60">
-            Manage menu items, restaurant users, and track real-time kitchen orders
+          <p className="text-xs text-slate-500">
+            Sign in with your administrator credentials to manage Dabba operations
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 bg-rose-950/60 border border-rose-800/80 rounded-xl text-rose-300 text-xs font-bold flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs font-medium flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
           <div>
-            <label className="block text-xs font-bold text-purple-300/80 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Admin Email
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-purple-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 name="email"
@@ -98,17 +91,17 @@ const AdminLogin = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder={adminPlaceholder}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white placeholder-purple-400/40 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 focus:outline-none transition-all"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:ring-1 focus:ring-slate-900 focus:border-slate-900 focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-purple-300/80 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Admin Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-purple-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
                 name="password"
@@ -117,7 +110,7 @@ const AdminLogin = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter administrator password"
-                className="w-full pl-10 pr-4 py-2.5 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white focus:ring-2 focus:ring-rose-500 focus:border-rose-500 focus:outline-none transition-all"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:ring-1 focus:ring-slate-900 focus:border-slate-900 focus:outline-none transition-colors"
               />
             </div>
           </div>
@@ -125,16 +118,16 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 hover:from-rose-500 hover:via-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-rose-950/50 transition-all flex items-center justify-center gap-2 disabled:opacity-60 border border-rose-400/20"
+            className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
           >
-            {loading ? 'Verifying Credentials...' : 'Access Admin Dashboard'}
+            {loading ? 'Verifying Credentials...' : 'Sign In to Dashboard'}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <div className="pt-4 border-t border-purple-900/40 text-center text-xs text-purple-300/60">
+        <div className="pt-4 border-t border-slate-100 text-center text-xs text-slate-500">
           Not an administrator?{' '}
-          <Link to="/login" className="font-bold text-rose-400 hover:text-rose-300 hover:underline">
+          <Link to="/login" className="font-semibold text-slate-900 hover:underline">
             Go to Customer Storefront
           </Link>
         </div>

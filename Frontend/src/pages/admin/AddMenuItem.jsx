@@ -83,41 +83,41 @@ const AddMenuItem = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-6">
       
       {/* Header */}
       <div>
         <Link
           to="/admin/menu"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-400 hover:text-rose-300 transition-colors mb-3"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors mb-2"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Menu Inventory
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to Menu Items
         </Link>
-        <h1 className="text-3xl font-black text-white tracking-tight">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
           Create New Menu Item
         </h1>
-        <p className="text-xs text-purple-300/60">
-          Specify dish title, culinary category, pricing, and upload an appetizing photo
+        <p className="text-xs text-slate-500 mt-0.5">
+          Provide dish details, pricing, category, and an image to publish
         </p>
       </div>
 
       {error && (
-        <div className="p-4 bg-rose-950/70 border border-rose-800/80 text-rose-300 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-lg shadow-rose-950/40">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium rounded-xl flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
           {error}
         </div>
       )}
 
       {/* Form Card */}
-      <div className="admin-glass-card rounded-3xl p-8 shadow-2xl">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs">
+        <form onSubmit={handleSubmit} className="space-y-5">
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             
             {/* Item Name */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-purple-300/80 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Item Name *
               </label>
               <input
@@ -126,24 +126,24 @@ const AddMenuItem = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="e.g. Wood-Fired Truffle Funghi Pizza"
-                className="w-full px-4 py-3 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white placeholder-purple-400/40 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all"
+                placeholder="e.g. Artisanal Sourdough Bruschetta"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
               />
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-xs font-bold text-purple-300/80 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Category *
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer"
               >
                 {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat} className="bg-[#150628] text-white">
+                  <option key={cat} value={cat}>
                     {cat}
                   </option>
                 ))}
@@ -152,7 +152,7 @@ const AddMenuItem = () => {
 
             {/* Price */}
             <div>
-              <label className="block text-xs font-bold text-purple-300/80 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Price (₹ INR) *
               </label>
               <input
@@ -164,13 +164,13 @@ const AddMenuItem = () => {
                 value={formData.price}
                 onChange={handleChange}
                 placeholder="e.g. 399"
-                className="w-full px-4 py-3 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white placeholder-purple-400/40 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
               />
             </div>
 
             {/* Description */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-purple-300/80 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Description *
               </label>
               <textarea
@@ -179,66 +179,66 @@ const AddMenuItem = () => {
                 required
                 value={formData.description}
                 onChange={handleChange}
-                placeholder="Detailed ingredient composition, preparation notes, and flavor profile..."
-                className="w-full px-4 py-3 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white placeholder-purple-400/40 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
+                placeholder="Ingredient highlights, dietary notes, and culinary details..."
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
               />
             </div>
 
             {/* Availability Checkbox */}
-            <div className="sm:col-span-2 flex items-center gap-3 pt-2">
+            <div className="sm:col-span-2 flex items-center gap-2.5 pt-1">
               <input
                 type="checkbox"
                 id="availability"
                 name="availability"
                 checked={formData.availability}
                 onChange={handleChange}
-                className="w-4 h-4 rounded text-rose-600 focus:ring-rose-500 bg-[#120622] border-purple-900/60"
+                className="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 border-slate-300"
               />
-              <label htmlFor="availability" className="text-xs font-bold text-purple-300/90 cursor-pointer">
-                In Stock & Available to Order immediately
+              <label htmlFor="availability" className="text-xs font-medium text-slate-700 cursor-pointer">
+                Available immediately for customer ordering
               </label>
             </div>
 
             {/* Image Upload / URL */}
-            <div className="sm:col-span-2 pt-4 border-t border-purple-900/40 space-y-4">
-              <label className="block text-xs font-bold text-purple-300/80">
-                Dish Photography / Image
+            <div className="sm:col-span-2 pt-4 border-t border-slate-100 space-y-3">
+              <label className="block text-xs font-semibold text-slate-700">
+                Dish Photography
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                {/* File Upload with Multer */}
-                <div className="border-2 border-dashed border-purple-800/60 rounded-2xl p-6 text-center hover:border-rose-500/70 transition-colors bg-[#130726]/40">
-                  <Upload className="w-8 h-8 text-rose-400/60 mx-auto mb-2" />
-                  <p className="text-xs font-bold text-white">Upload Image File</p>
-                  <p className="text-[10px] text-purple-300/50 mt-1">PNG, JPG, or WEBP up to 5MB</p>
+                {/* File Upload */}
+                <div className="border border-dashed border-slate-300 rounded-xl p-5 text-center hover:border-slate-400 transition-colors bg-slate-50/50">
+                  <Upload className="w-6 h-6 text-slate-400 mx-auto mb-1.5" />
+                  <p className="text-xs font-semibold text-slate-800">Upload Image File</p>
+                  <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, or WEBP up to 5MB</p>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    className="mt-3 block w-full text-[11px] text-purple-300/70 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gradient-to-r file:from-rose-600 file:via-purple-600 file:to-indigo-600 file:text-white hover:file:from-rose-500 hover:file:via-purple-500 hover:file:to-indigo-500 cursor-pointer transition-all"
+                    className="mt-2 block w-full text-[11px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer transition-colors"
                   />
                 </div>
 
                 {/* Or Image URL */}
-                <div className="space-y-2">
-                  <span className="text-[11px] font-bold text-purple-300/70 uppercase tracking-wider">Or Image Web URL</span>
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-semibold text-slate-600">Or Direct Image URL</span>
                   <input
                     type="url"
                     name="imageUrl"
                     value={formData.imageUrl}
                     onChange={handleChange}
                     placeholder="https://images.unsplash.com/..."
-                    className="w-full px-4 py-2.5 bg-[#120622] border border-purple-900/60 rounded-xl text-xs text-white placeholder-purple-400/40 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all"
+                    className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"
                   />
-                  <p className="text-[10px] text-purple-300/50">Provide a direct high-res image link</p>
+                  <p className="text-[10px] text-slate-400">Paste any public web image address</p>
                 </div>
               </div>
 
               {/* Live Preview */}
               {previewUrl && (
                 <div className="pt-2">
-                  <span className="text-xs font-bold text-purple-300/70 block mb-2">Live Image Preview:</span>
-                  <div className="w-40 h-28 rounded-2xl overflow-hidden border border-rose-800/60 bg-[#120622]">
+                  <span className="text-[11px] font-medium text-slate-500 block mb-1.5">Image Preview:</span>
+                  <div className="w-32 h-24 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
                     <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                   </div>
                 </div>
@@ -249,19 +249,19 @@ const AddMenuItem = () => {
           </div>
 
           {/* Submit */}
-          <div className="pt-6 border-t border-purple-900/40 flex justify-end gap-3">
+          <div className="pt-5 border-t border-slate-100 flex justify-end gap-2.5">
             <Link
               to="/admin/menu"
-              className="px-6 py-3 rounded-xl border border-purple-900/60 text-xs font-bold text-purple-300/70 hover:text-white hover:bg-purple-950/60 transition-colors"
+              className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 rounded-xl bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 hover:from-rose-500 hover:via-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-rose-950/50 transition-all flex items-center gap-2 disabled:opacity-60 border border-rose-400/20"
+              className="px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs shadow-xs transition-colors flex items-center gap-1.5 disabled:opacity-50"
             >
-              {loading ? 'Publishing Dish...' : 'Publish to Menu'}
+              {loading ? 'Saving Dish...' : 'Publish Item'}
               <Plus className="w-4 h-4" />
             </button>
           </div>

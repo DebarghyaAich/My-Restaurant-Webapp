@@ -53,74 +53,71 @@ const UserList = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto">
       
       {/* Header */}
-      <div>
-        <span className="text-xs font-black uppercase tracking-widest text-rose-400">
-          User Directory & Access Control
-        </span>
-        <h1 className="text-3xl font-black text-white tracking-tight mt-1">
-          Registered Restaurant Users
+      <div className="pb-2">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Registered Users
         </h1>
-        <p className="text-xs text-purple-300/60">
-          Monitor customer accounts, view registration dates, and manage active system privileges
+        <p className="text-xs text-slate-500 font-medium mt-0.5">
+          View registered customer accounts, roles, and administrative access
         </p>
       </div>
 
       {message && (
-        <div className="p-4 bg-emerald-950/70 border border-emerald-800/80 text-emerald-300 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-lg shadow-emerald-950/40">
-          <CheckCircle2 className="w-4 h-4" />
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium rounded-xl flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           {message}
         </div>
       )}
 
       {error && (
-        <div className="p-4 bg-rose-950/70 border border-rose-800/80 text-rose-300 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-lg shadow-rose-950/40">
-          <AlertCircle className="w-4 h-4" />
+        <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium rounded-xl flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
           {error}
         </div>
       )}
 
-      {/* Users Table matching Slide 4 & 5 */}
-      <div className="admin-glass-card rounded-3xl overflow-hidden shadow-2xl">
+      {/* Users Table */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
         {loading ? (
-          <div className="p-12 text-center text-purple-300/50 text-xs">
+          <div className="p-12 text-center text-slate-400 text-xs font-medium">
             Loading user accounts...
           </div>
         ) : users.length === 0 ? (
-          <div className="p-12 text-center text-purple-300/60">
+          <div className="p-12 text-center text-slate-400 text-xs font-medium">
             No registered users found.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-purple-900/40 text-purple-300/60 font-bold uppercase tracking-wider text-[10px] bg-purple-950/40">
-                  <th className="py-4 px-6">Name</th>
-                  <th className="py-4 px-4">Email</th>
-                  <th className="py-4 px-4">Role</th>
-                  <th className="py-4 px-4">Registration Date</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
+                <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="py-3 px-5 font-medium">Name</th>
+                  <th className="py-3 px-4 font-medium">Email</th>
+                  <th className="py-3 px-4 font-medium">Role</th>
+                  <th className="py-3 px-4 font-medium">Registration Date</th>
+                  <th className="py-3 px-5 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-purple-900/30">
+              <tbody className="divide-y divide-slate-100">
                 {users.map((u) => {
                   const uid = u._id || u.id;
                   const isSelf = uid === currentUser?.id;
                   return (
-                    <tr key={uid} className="hover:bg-purple-950/30 transition-colors">
+                    <tr key={uid} className="hover:bg-slate-50/70 transition-colors">
                       
-                      <td className="py-4 px-6">
+                      <td className="py-3.5 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-rose-950/70 text-rose-300 flex items-center justify-center font-bold text-xs uppercase border border-rose-800/60 shadow-inner">
+                          <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-semibold text-xs border border-slate-200 shrink-0">
                             {u.name?.charAt(0) || 'U'}
                           </div>
                           <div>
-                            <p className="font-bold text-sm text-white flex items-center gap-2">
+                            <p className="font-semibold text-xs text-slate-900 flex items-center gap-1.5">
                               {u.name}
                               {isSelf && (
-                                <span className="px-2 py-0.5 rounded-md bg-rose-950/90 text-rose-300 border border-rose-700/80 text-[10px] font-bold">
+                                <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-medium">
                                   You
                                 </span>
                               )}
@@ -129,35 +126,35 @@ const UserList = () => {
                         </div>
                       </td>
 
-                      <td className="py-4 px-4 text-purple-200/90 font-mono">
+                      <td className="py-3.5 px-4 text-slate-600 font-mono text-xs">
                         {u.email}
                       </td>
 
-                      <td className="py-4 px-4">
+                      <td className="py-3.5 px-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider inline-flex items-center gap-1.5 ${
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-medium inline-flex items-center gap-1 border ${
                             u.role === 'Admin'
-                              ? 'bg-rose-950/90 text-rose-300 border border-rose-700/80'
-                              : 'bg-indigo-950/70 text-indigo-300 border border-indigo-800/60'
+                              ? 'bg-slate-900 text-white border-slate-900'
+                              : 'bg-slate-100 text-slate-700 border-slate-200'
                           }`}
                         >
-                          {u.role === 'Admin' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3" />}
+                          {u.role === 'Admin' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3 text-slate-500" />}
                           {u.role}
                         </span>
                       </td>
 
-                      <td className="py-4 px-4 text-purple-300/60">
+                      <td className="py-3.5 px-4 text-slate-500">
                         {new Date(u.createdAt).toLocaleDateString()}
                       </td>
 
-                      <td className="py-4 px-6 text-right">
+                      <td className="py-3.5 px-5 text-right">
                         {isSelf ? (
-                          <span className="text-[11px] text-purple-400/70 italic">Active Session</span>
+                          <span className="text-[11px] text-slate-400 italic">Current User</span>
                         ) : (
                           <button
                             type="button"
                             onClick={() => handleDeleteUser(uid, u.name)}
-                            className="p-2 text-rose-400 hover:text-rose-300 hover:bg-rose-950/60 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                             title="Delete user"
                           >
                             <Trash2 className="w-4 h-4" />
