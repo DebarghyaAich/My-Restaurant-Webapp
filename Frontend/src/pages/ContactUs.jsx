@@ -38,7 +38,9 @@ import {
   Check,
   AlertCircle,
   ArrowRight,
-  UserCheck
+  UserCheck,
+  Minus,
+  Plus
 } from 'lucide-react';
 
 const FAQS = [
@@ -101,6 +103,7 @@ const ContactUs = () => {
     name: '',
     email: '',
     phone: '',
+    tables: 1,
     guests: '2 Guests',
     date: getDefaultDate(),
     time: '07:15 PM',
@@ -113,6 +116,7 @@ const ContactUs = () => {
   const [reservationResult, setReservationResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [openFaq, setOpenFaq] = useState(null);
+  const [availability, setAvailability] = useState(null);
 
   // Auto-fill user information when authenticated
   useEffect(() => {
@@ -126,8 +130,39 @@ const ContactUs = () => {
     }
   }, [user]);
 
+  // Check table slot availability (Max 20 tables)
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      try {
+        const res = await api.get(`/reservations/availability?date=${formData.date}&time=${encodeURIComponent(formData.time)}`);
+        if (res.data?.success) {
+          setAvailability(res.data);
+        }
+      } catch (err) {
+        // Silently continue with local capacity rules
+      }
+    };
+    if (formData.date && formData.time) {
+      fetchAvailability();
+    }
+  }, [formData.date, formData.time]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleTablesChange = (val) => {
+    const parsed = parseInt(val, 10);
+    if (isNaN(parsed) || parsed < 1) {
+      setFormData((prev) => ({ ...prev, tables: 1 }));
+      setErrorMessage('');
+    } else if (parsed > 20) {
+      setFormData((prev) => ({ ...prev, tables: 20 }));
+      setErrorMessage('More than 20 tables are not allowed.');
+    } else {
+      setFormData((prev) => ({ ...prev, tables: parsed }));
+      setErrorMessage('');
+    }
   };
 
   const handleGuestsChange = (val) => {
@@ -155,6 +190,28 @@ const ContactUs = () => {
       return;
     }
 
+    const numTables = parseInt(formData.tables, 10) || 1;
+
+    // Strict validation: More than 20 tables are not allowed
+    if (numTables > 20) {
+      setErrorMessage('More than 20 tables are not allowed.');
+      return;
+    }
+
+    if (numTables < 1) {
+      setErrorMessage('At least 1 table must be booked.');
+      return;
+    }
+
+    if (availability && availability.availableTables < numTables) {
+      setErrorMessage(
+        availability.availableTables === 0
+          ? 'More than 20 tables are not allowed. All 20 tables are fully booked for this time slot.'
+          : `More than 20 tables are not allowed. Only ${availability.availableTables} table(s) remaining for this time slot.`
+      );
+      return;
+    }
+
     if (!formData.phone || formData.phone.trim().length < 7) {
       setErrorMessage('Please provide a valid contact phone number for SMS confirmation.');
       return;
@@ -165,6 +222,7 @@ const ContactUs = () => {
       const res = await api.post('/reservations', {
         date: formData.date,
         time: formData.time,
+        tables: numTables,
         guests: formData.guests,
         seatingArea: formData.seatingArea,
         phone: formData.phone,
@@ -176,6 +234,10 @@ const ContactUs = () => {
         setSubmitted(true);
       }
     } catch (err) {
+      if (err.response?.data?.message) {
+        setErrorMessage(err.response.data.message);
+        return;
+      }
       console.warn('API reservation error, using local fallback:', err);
       // Resilient fallback for table reservation confirmation
       const fallbackCode = `DABBA-RES-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -184,6 +246,7 @@ const ContactUs = () => {
         customerName: formData.name || user?.name || 'Valued Diner',
         email: formData.email || user?.email,
         phone: formData.phone,
+        tables: numTables,
         guests: formData.guests,
         date: formData.date,
         time: formData.time,
@@ -499,6 +562,13 @@ const ContactUs = () => {
                     </div>
 
                     <div>
+                      <span className="block text-[10px] opacity-70">Tables Reserved:</span>
+                      <strong className={isBeige ? 'text-stone-900' : 'text-white'}>
+                        {reservationResult.tables || 1} Table{(reservationResult.tables || 1) > 1 ? 's' : ''}
+                      </strong>
+                    </div>
+
+                    <div className="col-span-2">
                       <span className="block text-[10px] opacity-70">Seating Ambience:</span>
                       <strong className={isBeige ? 'text-stone-900' : 'text-white'}>
                         {reservationResult.seatingArea}
