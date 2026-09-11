@@ -684,6 +684,94 @@ const ContactUs = () => {
                     />
                   </div>
 
+                  {/* Number of Tables to Book (Max 20 Policy) */}
+                  <div className="sm:col-span-2 p-4 rounded-2xl border transition-all" style={{
+                    backgroundColor: isBeige ? 'rgba(254, 243, 199, 0.4)' : 'rgba(25, 7, 5, 0.6)',
+                    borderColor: isBeige ? '#fde68a' : '#451a03'
+                  }}>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <label className={`text-xs font-black uppercase tracking-wider ${isBeige ? 'text-stone-900' : 'text-white'}`}>
+                            Number of Tables to Book *
+                          </label>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                            Max 20 Tables Allowed
+                          </span>
+                        </div>
+                        <p className={`text-[11px] mt-0.5 ${isBeige ? 'text-stone-600' : 'text-orange-200/60'}`}>
+                          Restaurant policy: More than 20 tables are not allowed per reservation or dining slot.
+                        </p>
+                      </div>
+
+                      {/* Live Slot Capacity Status */}
+                      {availability && (
+                        <div className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold self-start sm:self-auto ${
+                          availability.isFullyBooked
+                            ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        }`}>
+                          {availability.isFullyBooked 
+                            ? '🚫 Slot Full (0/20 Available)' 
+                            : `🟢 ${availability.availableTables} of 20 Tables Available`}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className={`flex items-center rounded-xl border overflow-hidden p-1 ${
+                        isBeige ? 'bg-white border-amber-200' : 'bg-black/30 border-orange-950'
+                      }`}>
+                        <button
+                          type="button"
+                          onClick={() => handleTablesChange(Number(formData.tables) - 1)}
+                          disabled={Number(formData.tables) <= 1}
+                          className="w-9 h-9 flex items-center justify-center rounded-lg bg-orange-500/10 hover:bg-orange-500/30 text-orange-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <input
+                          type="number"
+                          name="tables"
+                          min="1"
+                          max="20"
+                          value={formData.tables}
+                          onChange={(e) => handleTablesChange(e.target.value)}
+                          className={`w-16 text-center font-mono font-black text-sm bg-transparent focus:outline-none ${
+                            isBeige ? 'text-stone-900' : 'text-white'
+                          }`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleTablesChange(Number(formData.tables) + 1)}
+                          disabled={Number(formData.tables) >= 20}
+                          className="w-9 h-9 flex items-center justify-center rounded-lg bg-orange-500/10 hover:bg-orange-500/30 text-orange-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {[1, 2, 3, 4, 5, 10, 15, 20].map((count) => (
+                          <button
+                            key={count}
+                            type="button"
+                            onClick={() => handleTablesChange(count)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                              Number(formData.tables) === count
+                                ? 'bg-orange-600 text-white shadow-sm scale-105'
+                                : isBeige
+                                ? 'bg-white border border-amber-200 text-stone-700 hover:bg-amber-50'
+                                : 'bg-black/40 border border-orange-950 text-orange-200/80 hover:bg-orange-950/60'
+                            }`}
+                          >
+                            {count} {count === 1 ? 'Table' : 'Tables'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Upgraded Animated Dropdown: Guests */}
                   <div>
                     <AnimatedDropdown

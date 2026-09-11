@@ -16,7 +16,8 @@ import {
   Calendar,
   Users,
   Compass,
-  Sparkles
+  Sparkles,
+  UtensilsCrossed
 } from 'lucide-react';
 
 const STATUS_STEPS = ['Pending', 'Preparing', 'Out for Delivery', 'Delivered'];
