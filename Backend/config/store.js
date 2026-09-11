@@ -2,10 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_FILE = path.join(__dirname, '../data/local_db.json');
+
+if (!process.env.MONGO_URI) {
+  if (fs.existsSync(path.join(__dirname, '../../.env'))) {
+    dotenv.config({ path: path.join(__dirname, '../../.env') });
+  } else if (fs.existsSync(path.join(__dirname, '../.env'))) {
+    dotenv.config({ path: path.join(__dirname, '../.env') });
+  }
+}
 
 let isMongoConnected = false;
 
@@ -129,13 +138,14 @@ loadLocalData();
 export const connectDB = async () => {
   const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/dabba';
   try {
-    console.log(`[Dabba DB] Attempting connection to: ${uri}`);
-    await mongoose.connect(uri, { serverSelectionTimeoutMS: 2500 });
+    const maskedUri = uri.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@');
+    console.log(`[Dabba DB] Connecting to database: ${maskedUri}`);
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 8000 });
     isMongoConnected = true;
     console.log('✅ [Dabba DB] Connected successfully to MongoDB!');
   } catch (error) {
     isMongoConnected = false;
-    console.warn('⚠️ [Dabba DB] MongoDB server is not currently reachable.');
+    console.warn(`⚠️ [Dabba DB] MongoDB connection error: ${error.message}`);
     console.log('⚡ [Dabba DB] Seamlessly active in Persistent Local/In-Memory Mode (data stored in data/local_db.json).');
   }
 };
