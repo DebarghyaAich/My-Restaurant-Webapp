@@ -136,7 +136,21 @@ const saveLocalData = () => {
 loadLocalData();
 
 export const connectDB = async () => {
-  const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/dabba';
+  let uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/dabba';
+  
+  // Auto-sanitize: remove invalid slashes or extra path segments in database name (e.g. /restaurantdb/webskitars -> /restaurantdb)
+  if (uri.includes('.mongodb.net/')) {
+    const parts = uri.split('.mongodb.net/');
+    const afterNet = parts[1] || '';
+    const [pathPart, ...queryParts] = afterNet.split('?');
+    const segments = pathPart.split('/').filter(Boolean);
+    if (segments.length > 1) {
+      const validDb = segments[0];
+      const queryString = queryParts.length > 0 ? '?' + queryParts.join('?') : '?retryWrites=true&w=majority';
+      uri = parts[0] + '.mongodb.net/' + validDb + queryString;
+    }
+  }
+
   try {
     const maskedUri = uri.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@');
     console.log(`[Dabba DB] Connecting to database: ${maskedUri}`);
