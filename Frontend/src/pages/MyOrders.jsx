@@ -327,7 +327,7 @@ const MyOrders = () => {
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
                     <div className={`p-3 rounded-xl border ${isBeige ? 'bg-stone-50 border-stone-100' : 'bg-[#120504] border-orange-950'}`}>
                       <span className={`block text-[10px] uppercase font-bold tracking-wider mb-1 flex items-center gap-1 ${isBeige ? 'text-stone-500' : 'text-orange-200/50'}`}>
                         <Calendar className="w-3 h-3 text-orange-500" /> Date
@@ -343,6 +343,15 @@ const MyOrders = () => {
                       </span>
                       <strong className={isBeige ? 'text-stone-900' : 'text-white'}>
                         {resv.time}
+                      </strong>
+                    </div>
+
+                    <div className={`p-3 rounded-xl border ${isBeige ? 'bg-stone-50 border-stone-100' : 'bg-[#120504] border-orange-950'}`}>
+                      <span className={`block text-[10px] uppercase font-bold tracking-wider mb-1 flex items-center gap-1 ${isBeige ? 'text-stone-500' : 'text-orange-200/50'}`}>
+                        <UtensilsCrossed className="w-3 h-3 text-orange-500" /> Tables
+                      </span>
+                      <strong className={isBeige ? 'text-stone-900' : 'text-white'}>
+                        {resv.tables || 1} Table{(resv.tables || 1) > 1 ? 's' : ''}
                       </strong>
                     </div>
 

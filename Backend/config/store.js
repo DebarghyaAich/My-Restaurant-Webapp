@@ -433,6 +433,17 @@ export const ReservationModel = {
     return resv;
   },
 
+  async findByIdAndDelete(id) {
+    if (isMongoConnected) return await MongooseReservation.findByIdAndDelete(id);
+    const idx = (memoryDb.reservations || []).findIndex(r => r._id === id || r.id === id || r.referenceCode === id);
+    if (idx !== -1) {
+      const removed = memoryDb.reservations.splice(idx, 1)[0];
+      saveLocalData();
+      return removed;
+    }
+    return null;
+  },
+
   async countDocuments() {
     if (isMongoConnected) return await MongooseReservation.countDocuments();
     return (memoryDb.reservations || []).length;

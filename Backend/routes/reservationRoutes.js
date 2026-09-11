@@ -65,20 +65,21 @@ router.get('/availability', async (req, res) => {
 router.post('/', verifyToken, async (req, res) => {
   try {
     const { date, time, guests, seatingArea, phone, message } = req.body;
-    const numTables = parseInt(req.body.tables, 10) || 1;
+    const rawTables = req.body.tables;
+    const numTables = rawTables !== undefined ? parseInt(rawTables, 10) : 1;
+
+    if (isNaN(numTables) || numTables < 1) {
+      return res.status(400).json({
+        success: false,
+        message: 'At least 1 table must be booked.'
+      });
+    }
 
     // Strict rule: More than 20 tables are not allowed
     if (numTables > 20) {
       return res.status(400).json({
         success: false,
         message: 'More than 20 tables are not allowed.'
-      });
-    }
-
-    if (numTables < 1) {
-      return res.status(400).json({
-        success: false,
-        message: 'At least 1 table must be booked.'
       });
     }
 
@@ -154,9 +155,17 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-// GET /api/reservations/:id
-router.get('/:id', async (req, res) => {
+// PUT /api/reservations/:id/status (Admin or user to update reservation status)
+router.put('/:id/status', verifyToken, async (req, res) => {
   try {
+    const { status } = req.body;
+    if (!['Confirmed', 'Seated', 'Completed', 'Cancelled'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid reservation status.'
+      });
+    }
+
     const reservation = await ReservationModel.findById(req.params.id);
     if (!reservation) {
       return res.status(404).json({
@@ -164,14 +173,49 @@ router.get('/:id', async (req, res) => {
         message: 'Reservation not found.'
       });
     }
+
+    // Only Admin or the booking owner can update
+    if (req.user.role !== 'Admin' && reservation.user?.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. You cannot update this reservation.'
+      });
+    }
+
+    const updated = await ReservationModel.findByIdAndUpdate(req.params.id, { status });
     return res.json({
       success: true,
-      reservation
+      message: `Reservation status updated to ${status}.`,
+      reservation: updated
     });
   } catch (error) {
+    console.error('Error updating reservation status:', error);
     return res.status(500).json({
       success: false,
-      message: 'Could not fetch reservation details.'
+      message: 'Could not update reservation status.'
+    });
+  }
+});
+
+// DELETE /api/reservations/:id (Admin only)
+router.delete('/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const removed = await ReservationModel.findByIdAndDelete(req.params.id);
+    if (!removed) {
+      return res.status(404).json({
+        success: false,
+        message: 'Reservation not found.'
+      });
+    }
+    return res.json({
+      success: true,
+      message: 'Reservation cancelled and deleted successfully.'
+    });
+  } catch (error) {
+    console.error('Error deleting reservation:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Could not delete reservation.'
     });
   }
 });

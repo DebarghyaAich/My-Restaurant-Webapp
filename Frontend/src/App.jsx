@@ -46,6 +46,7 @@ import AddMenuItem from './pages/admin/AddMenuItem';
 import EditMenuItem from './pages/admin/EditMenuItem';
 import UserList from './pages/admin/UserList';
 import OrderList from './pages/admin/OrderList';
+import ReservationList from './pages/admin/ReservationList';
 import FloatingBackground from './components/FloatingBackground';
 import { useTheme } from './context/ThemeContext';
 
@@ -134,6 +135,7 @@ function App() {
             <Route path="menu/edit/:id" element={<EditMenuItem />} />
             <Route path="users" element={<UserList />} />
             <Route path="orders" element={<OrderList />} />
+            <Route path="reservations" element={<ReservationList />} />
           </Route>
 
           {/* Fallback */}

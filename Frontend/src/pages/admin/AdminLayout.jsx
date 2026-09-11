@@ -28,7 +28,8 @@ import {
   Menu as MenuIcon, 
   X,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Calendar
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -44,9 +45,10 @@ const AdminLayout = () => {
 
   const navLinks = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+    { label: 'Table Reservations', path: '/admin/reservations', icon: Calendar },
+    { label: 'Customer Orders', path: '/admin/orders', icon: ShoppingBag },
     { label: 'Menu Items', path: '/admin/menu', icon: Utensils },
     { label: 'Add Menu Item', path: '/admin/menu/new', icon: PlusCircle },
-    { label: 'Customer Orders', path: '/admin/orders', icon: ShoppingBag },
     { label: 'Registered Users', path: '/admin/users', icon: Users }
   ];
 

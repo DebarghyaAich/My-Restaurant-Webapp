@@ -13,7 +13,9 @@ import {
   Plus, 
   ArrowRight,
   TrendingUp,
-  Sparkles
+  Sparkles,
+  Calendar,
+  UtensilsCrossed
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -81,7 +83,7 @@ const Dashboard = () => {
       </div>
 
       {/* Primary KPI Metrics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         
         {/* Total Menu Items */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
@@ -127,6 +129,25 @@ const Dashboard = () => {
             <span className="text-2xl font-bold text-slate-900">{stats?.totalOrders || 0}</span>
             <Link to="/admin/orders" className="text-xs font-medium text-slate-600 hover:text-slate-900 flex items-center gap-0.5 transition-colors">
               Track <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Table Bookings KPI */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-500">Table Bookings</span>
+            <div className="w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
+              <Calendar className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between">
+            <div>
+              <span className="text-2xl font-bold text-slate-900">{stats?.totalReservations || 0}</span>
+              <span className="text-[10px] text-slate-400 block font-semibold">({stats?.totalTablesBooked || 0} tables held)</span>
+            </div>
+            <Link to="/admin/reservations" className="text-xs font-medium text-slate-600 hover:text-slate-900 flex items-center gap-0.5 transition-colors">
+              Manage <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
@@ -268,6 +289,87 @@ const Dashboard = () => {
           </div>
         )}
 
+      </div>
+
+      {/* Recent Table Bookings Section */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div>
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <UtensilsCrossed className="w-4 h-4 text-orange-600" />
+              Recent Table Bookings
+            </h2>
+            <p className="text-xs text-slate-500 font-medium mt-0.5">
+              Customers who recently reserved dining tables
+            </p>
+          </div>
+          <Link
+            to="/admin/reservations"
+            className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1 transition-colors"
+          >
+            View All ({stats?.totalReservations || 0}) <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        {(!stats?.recentReservations || stats.recentReservations.length === 0) ? (
+          <div className="text-center py-8 text-slate-400 text-xs font-medium">
+            No table reservations booked yet. When guests reserve tables, they will show up here.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="pb-3 font-medium">Booking Ref</th>
+                  <th className="pb-3 font-medium">Who Booked</th>
+                  <th className="pb-3 font-medium">Tables & Guests</th>
+                  <th className="pb-3 font-medium">Date & Time</th>
+                  <th className="pb-3 font-medium">Seating Zone</th>
+                  <th className="pb-3 font-medium text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {stats.recentReservations.map((r) => (
+                  <tr key={r._id || r.id || r.referenceCode} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-3.5 font-mono font-bold text-orange-600">
+                      {r.referenceCode}
+                    </td>
+                    <td className="py-3.5">
+                      <p className="font-semibold text-slate-900">{r.customerName}</p>
+                      <p className="text-[11px] text-slate-500">{r.phone} • {r.email}</p>
+                    </td>
+                    <td className="py-3.5">
+                      <span className="inline-flex items-center gap-1 font-bold text-slate-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded text-[11px]">
+                        {r.tables || 1} Table{(r.tables || 1) > 1 ? 's' : ''}
+                      </span>
+                      <span className="text-[11px] text-slate-500 ml-1.5">({r.guests})</span>
+                    </td>
+                    <td className="py-3.5">
+                      <p className="font-medium text-slate-800">{r.date}</p>
+                      <p className="text-[11px] text-slate-500">{r.time}</p>
+                    </td>
+                    <td className="py-3.5 text-slate-600">
+                      {r.seatingArea || 'Main Dining Hall'}
+                    </td>
+                    <td className="py-3.5 text-right">
+                      <span className={`inline-flex px-2 py-0.5 rounded-md text-[11px] font-medium border ${
+                        r.status === 'Confirmed'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : r.status === 'Seated'
+                          ? 'bg-blue-50 text-blue-700 border-blue-200'
+                          : r.status === 'Cancelled'
+                          ? 'bg-rose-50 text-rose-700 border-rose-200'
+                          : 'bg-slate-50 text-slate-700 border-slate-200'
+                      }`}>
+                        {r.status || 'Confirmed'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
     </div>
